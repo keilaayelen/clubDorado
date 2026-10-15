@@ -1,0 +1,516 @@
+.scene {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.night,
+.chips,
+.veil,
+.wheel,
+.coin,
+.girl {
+  pointer-events: none;
+}
+
+.night,
+.chips,
+.veil {
+  position: fixed;
+  inset: 0;
+}
+
+.night {
+  background:
+    linear-gradient(to bottom, rgba(12, 4, 18, 0.2), rgba(12, 4, 18, 0.45)),
+    url("/scene/promo-noche-dorada.jpg") center 70% / cover no-repeat;
+  transform: scale(1.08);
+  animation: drift-bg 22s ease-in-out infinite alternate;
+}
+
+.chips {
+  background: url("/scene/promo-bonus-oro.jpg") 80% 100% / 68% no-repeat;
+  opacity: 0.28;
+  mix-blend-mode: screen;
+  mask-image: radial-gradient(circle at 78% 88%, #000 0%, transparent 62%);
+}
+
+.wheel {
+  position: fixed;
+  border-radius: 50%;
+  background: conic-gradient(
+    #7a1424 0deg 18deg,
+    #140e0c 18deg 36deg,
+    #e6c15a 36deg 54deg,
+    #7a1424 54deg 72deg,
+    #140e0c 72deg 90deg,
+    #f6e2a8 90deg 108deg,
+    #7a1424 108deg 126deg,
+    #2a160f 126deg 144deg,
+    #c9962e 144deg 162deg,
+    #7a1424 162deg 180deg,
+    #140e0c 180deg 198deg,
+    #e6c15a 198deg 216deg,
+    #7a1424 216deg 234deg,
+    #2a160f 234deg 252deg,
+    #f6e2a8 252deg 270deg,
+    #7a1424 270deg 288deg,
+    #140e0c 288deg 306deg,
+    #c9962e 306deg 324deg,
+    #7a1424 324deg 342deg,
+    #2a160f 342deg 360deg
+  );
+  box-shadow:
+    inset 0 0 0 12px #4a2d10,
+    inset 0 0 0 16px #e6c15a,
+    0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+.wheel::after {
+  content: "";
+  position: absolute;
+  inset: 36%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff3c9, #c9962e 55%, #5a3a12);
+  box-shadow: 0 0 0 6px rgba(230, 193, 90, 0.8);
+}
+
+.wheel-a {
+  width: 340px;
+  height: 340px;
+  left: -120px;
+  top: 16%;
+  opacity: 0.42;
+  animation: spin 16s linear infinite;
+}
+
+.wheel-b {
+  width: 210px;
+  height: 210px;
+  right: -70px;
+  bottom: 6%;
+  opacity: 0.34;
+  animation: spin 11s linear infinite reverse;
+}
+
+.wheel-c {
+  width: 150px;
+  height: 150px;
+  left: 8%;
+  bottom: 18%;
+  opacity: 0.28;
+  animation: spin 9s linear infinite;
+}
+
+.coin {
+  position: fixed;
+  z-index: 2;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 32%, #fff6d4, #f0d078 42%, #a9782a 70%, #fff1c4 100%);
+  box-shadow:
+    inset 0 0 0 3px rgba(92, 58, 16, 0.75),
+    0 8px 14px rgba(0, 0, 0, 0.35);
+  animation-name: float-coin;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.girl {
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  top: 3.4rem;
+  width: min(460px, 108vw);
+  height: 46vh;
+  max-width: none;
+  object-fit: cover;
+  object-position: center 16%;
+  transform: translateX(-50%);
+  mask-image: radial-gradient(ellipse 78% 72% at 50% 36%, #000 42%, transparent 76%);
+  animation: float-girl 7s ease-in-out infinite;
+}
+
+.veil {
+  z-index: 2;
+  background:
+    linear-gradient(to bottom, rgba(8, 3, 14, 0.72) 0%, rgba(8, 3, 14, 0.18) 24%, rgba(8, 3, 14, 0.05) 46%, rgba(8, 3, 14, 0.55) 72%, rgba(8, 3, 14, 0.9) 100%);
+}
+
+.page {
+  position: relative;
+  z-index: 3;
+  width: min(440px, 100%);
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 1.2rem 1rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.enter {
+  display: none;
+}
+
+.brand {
+  text-align: center;
+  padding-top: 0.2rem;
+  text-shadow: 0 8px 22px rgba(0, 0, 0, 0.65);
+}
+
+.mark {
+  margin: 0;
+  color: #e7c56a;
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+h1 {
+  margin: 0.35rem 0 0;
+  font-family: Cinzel, Georgia, serif;
+  font-size: clamp(1.55rem, 6.2vw, 2.7rem);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 0.95;
+  text-transform: uppercase;
+  background: linear-gradient(#fff8dc, #f3d78a 55%, #e2b340);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.tag {
+  margin: 0.45rem 0 0;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: #f0d48a;
+}
+
+.carousel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.15rem;
+  border: 1px solid rgba(226, 179, 64, 0.45);
+  background: rgba(18, 8, 24, 0.72);
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.track {
+  display: flex;
+  transition: transform 0.45s ease;
+}
+
+.slide {
+  min-width: 100%;
+  margin: 0;
+  position: relative;
+}
+
+.slide img,
+.slide video {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.slide video {
+  display: block;
+  pointer-events: none;
+  background: #120818;
+}
+
+figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 1.6rem 0.9rem 0.7rem;
+  background: linear-gradient(transparent, rgba(10, 4, 16, 0.88));
+  font-weight: 700;
+}
+
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(10, 4, 16, 0.55);
+  color: #fff6d2;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.prev { left: 0.45rem; }
+.next { right: 0.45rem; }
+
+.dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.55rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.dots button {
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 246, 210, 0.45);
+  cursor: pointer;
+}
+
+.dots button.on {
+  width: 1.15rem;
+  background: #f0d48a;
+}
+
+.sheet {
+  margin-top: auto;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: 0.85rem;
+  padding-top: 0.4rem;
+}
+
+.sheet.solo {
+  margin-bottom: auto;
+}
+
+.sheet .points,
+.sheet .whatsapp {
+  width: min(100%, 22rem);
+}
+
+.points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.points li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  font-weight: 700;
+}
+
+.points span {
+  color: #3ddc57;
+  font-weight: 800;
+}
+
+.whatsapp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 3.4rem;
+  padding: 0.85rem 1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  color: #04210c;
+  font-weight: 800;
+  background: linear-gradient(#67f56f, #22b53a);
+  box-shadow: 0 12px 28px rgba(34, 181, 58, 0.28);
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.whatsapp:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 16px 32px rgba(34, 181, 58, 0.45);
+  filter: brightness(1.06);
+}
+
+.whatsapp:active {
+  transform: translateY(1px) scale(0.97);
+  box-shadow: 0 6px 14px rgba(34, 181, 58, 0.25);
+  filter: brightness(0.96);
+}
+
+.whatsapp svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.footer {
+  display: grid;
+  justify-items: center;
+  gap: 0.55rem;
+  padding-top: 0.4rem;
+}
+
+.footer p {
+  margin: 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: #f0d48a;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.social {
+  display: flex;
+  justify-content: center;
+  gap: 0.7rem;
+}
+
+.round {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-decoration: none;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.round:hover {
+  transform: translateY(-3px) scale(1.12);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.38);
+  filter: brightness(1.08);
+}
+
+.round:active {
+  transform: translateY(1px) scale(0.9);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  filter: brightness(0.94);
+}
+
+.round svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.ig {
+  background: linear-gradient(135deg, #f7ce68, #e1306c 55%, #7b2ff7);
+}
+
+.fb {
+  background: #1877f2;
+}
+
+@media (min-width: 1100px) {
+  .enter {
+    display: inline-flex;
+    position: fixed;
+    top: 22px;
+    right: 28px;
+    z-index: 6;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid rgba(226, 179, 64, 0.7);
+    border-radius: 999px;
+    color: #f0d48a;
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    background: rgba(18, 6, 20, 0.72);
+  }
+
+  .page {
+    padding-top: 4.2rem;
+  }
+
+  .girl {
+    top: auto;
+    left: auto;
+    right: -4%;
+    bottom: -10%;
+    width: 52vw;
+    height: auto;
+    object-fit: unset;
+    object-position: center top;
+    transform: none;
+    animation-name: float-girl-desk;
+    mask-image: radial-gradient(ellipse 68% 64% at 50% 40%, #000 46%, transparent 76%);
+  }
+
+  .wheel-a {
+    width: 460px;
+    height: 460px;
+    left: -80px;
+    top: 8%;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes drift-bg {
+  to { transform: scale(1.16) translate3d(-1.5%, -1%, 0); }
+}
+
+@keyframes float-coin {
+  0% { transform: translateY(0) rotateY(0deg); }
+  50% { transform: translateY(-28px) rotateY(180deg); }
+  100% { transform: translateY(0) rotateY(360deg); }
+}
+
+@media (max-width: 1099px) {
+  .sheet {
+    order: 2;
+  }
+
+  .carousel {
+    order: 3;
+    margin-top: 0;
+  }
+
+  .footer {
+    order: 4;
+  }
+}
+
+@media (max-width: 720px) {
+  .wheel-a {
+    width: 200px;
+    height: 200px;
+    left: -88px;
+    top: 4%;
+    opacity: 0.26;
+  }
+}
+
+@keyframes float-girl {
+  50% { transform: translateX(-50%) translateY(-12px); }
+}
+
+@keyframes float-girl-desk {
+  50% { transform: translateY(-14px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .night,
+  .wheel,
+  .coin,
+  .girl,
+  .track,
+  .whatsapp,
+  .round {
+    animation: none;
+    transition: none;
+  }
+}

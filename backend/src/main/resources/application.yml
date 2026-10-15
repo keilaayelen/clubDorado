@@ -1,0 +1,27 @@
+server:
+  port: 8080
+  tomcat:
+    max-http-form-post-size: 42MB
+    max-swallow-size: 42MB
+
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/goldenclub
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  servlet:
+    multipart:
+      max-file-size: 40MB
+      max-request-size: 42MB
+
+goldenclub:
+  admin-user: admin
+  admin-password: golden2026aye
+  whatsapp-phone: "5492234376766"
+  whatsapp-message: "Hola, quiero más info"
+  upload-dir: uploads

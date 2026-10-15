@@ -1,0 +1,51 @@
+<main class="panel">
+  <header>
+    <div>
+      <p class="mark">♠ Golden Club</p>
+      <h1>Promos</h1>
+    </div>
+    <div class="actions">
+      <a routerLink="/">Ver la página</a>
+      <button type="button" class="ghost" (click)="logout()">Salir</button>
+    </div>
+  </header>
+
+  <section class="upload">
+    <h2>Cargar foto o video</h2>
+    <label>
+      Título, si querés que se vea encima
+      <input name="title" [(ngModel)]="title" maxlength="80" placeholder="Bonus extra en tu primera carga">
+    </label>
+    <label>
+      Foto o video
+      <input #fileInput type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,.jpg,.jpeg,.png,.webp,.mp4,.webm">
+    </label>
+    @if (error) {
+      <p class="error">{{ error }}</p>
+    }
+    @if (message) {
+      <p class="ok">{{ message }}</p>
+    }
+    <button type="button" (click)="upload()" [disabled]="uploading">
+      {{ uploading ? 'Subiendo...' : 'Subir' }}
+    </button>
+  </section>
+
+  <section class="grid">
+    @for (promo of promos; track promo.id) {
+      <article>
+        @if (isVideo(promo)) {
+          <video [src]="promo.imageUrl" [muted]="true" playsinline loop autoplay [attr.aria-label]="promo.title || 'Promo'"></video>
+        } @else {
+          <img [src]="promo.imageUrl" [alt]="promo.title || 'Promo'">
+        }
+        <div>
+          <p>{{ promo.title || 'Sin título' }}</p>
+          <button type="button" class="danger" (click)="remove(promo)">Borrar</button>
+        </div>
+      </article>
+    } @empty {
+      <p class="empty">Todavía no hay promos.</p>
+    }
+  </section>
+</main>

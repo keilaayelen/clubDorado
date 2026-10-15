@@ -1,0 +1,24 @@
+<main class="login">
+  <form (ngSubmit)="submit()">
+    <p class="mark">♠</p>
+    <h1>Golden Club</h1>
+    <p class="hint">Acceso para cargar y borrar promos</p>
+
+    <label>
+      Usuario
+      <input name="username" [(ngModel)]="username" autocomplete="username" required>
+    </label>
+
+    <label>
+      Contraseña
+      <input name="password" type="password" [(ngModel)]="password" autocomplete="current-password" required>
+    </label>
+
+    @if (error) {
+      <p class="error">{{ error }}</p>
+    }
+
+    <button type="submit" [disabled]="loading">{{ loading ? 'Entrando...' : 'Entrar' }}</button>
+    <a routerLink="/">Volver a la página</a>
+  </form>
+</main>

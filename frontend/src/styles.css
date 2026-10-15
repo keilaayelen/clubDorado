@@ -1,0 +1,28 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: Manrope, "Segoe UI", sans-serif;
+  color: #f6f1e7;
+  background:
+    radial-gradient(900px 420px at 50% -8%, rgba(226, 179, 64, 0.22), transparent 58%),
+    radial-gradient(700px 520px at 110% 0%, rgba(128, 42, 190, 0.38), transparent 46%),
+    #120614;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
