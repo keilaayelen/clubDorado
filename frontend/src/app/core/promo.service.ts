@@ -24,4 +24,12 @@ export class PromoService {
   remove(id: number) {
     return this.http.delete(`/api/promos/${id}`);
   }
+
+  reorder(ids: number[]) {
+    return this.http.put<Promo[]>('/api/promos/order', ids);
+  }
+
+  rename(id: number, title: string) {
+    return this.http.put<Promo>(`/api/promos/${id}`, { title });
+  }
 }

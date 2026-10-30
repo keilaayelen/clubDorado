@@ -1,0 +1,78 @@
+<main class="crm">
+  <header>
+    <div>
+      <p class="mark">♠ Golden Club</p>
+      <h1>Conversaciones</h1>
+    </div>
+    <div class="actions">
+      <a routerLink="/panel">Promos</a>
+      <a routerLink="/">Ver la página</a>
+      <button type="button" class="ghost" (click)="logout()">Salir</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <section class="inbox">
+      <div class="inbox-head">
+        <h2>Bandeja</h2>
+        <span>0</span>
+      </div>
+      <div class="empty">
+        <p class="bubble">Hola</p>
+        <h3>Todavía no hay mensajes</h3>
+        <p>Cuando conectemos los números, cada chat entra acá. El bot saluda primero y después lo toma el equipo.</p>
+      </div>
+    </section>
+
+    <section class="setup">
+      <form (ngSubmit)="save()">
+        <div class="card">
+          <h2>Mensaje inicial del bot</h2>
+          <p class="hint">Es el primer mensaje que se manda solo, antes de que alguien del equipo escriba.</p>
+          <label>
+            Saludo
+            <textarea name="welcome" [(ngModel)]="settings.welcomeMessage" maxlength="500" rows="5"></textarea>
+          </label>
+          <p class="count">{{ settings.welcomeMessage.length }}/500</p>
+          <div class="preview">
+            <span>Así lo va a ver el cliente</span>
+            <p>{{ settings.welcomeMessage || 'Escribí el saludo' }}</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Números</h2>
+          <p class="hint">Por ahora son dos. Podés dejarlos vacíos y cargarlos después.</p>
+          <div class="line">
+            <label>
+              Nombre de la línea
+              <input name="lineOneName" [(ngModel)]="settings.lineOneName" maxlength="40" placeholder="Atención">
+            </label>
+            <label>
+              Número
+              <input name="lineOnePhone" [(ngModel)]="settings.lineOnePhone" inputmode="numeric" placeholder="5492234376766">
+            </label>
+          </div>
+          <div class="line">
+            <label>
+              Nombre de la línea
+              <input name="lineTwoName" [(ngModel)]="settings.lineTwoName" maxlength="40" placeholder="Turno noche">
+            </label>
+            <label>
+              Número
+              <input name="lineTwoPhone" [(ngModel)]="settings.lineTwoPhone" inputmode="numeric" placeholder="54911...">
+            </label>
+          </div>
+        </div>
+
+        @if (error) {
+          <p class="error">{{ error }}</p>
+        }
+        @if (message) {
+          <p class="ok">{{ message }}</p>
+        }
+        <button type="submit" [disabled]="saving">{{ saving ? 'Guardando...' : 'Guardar' }}</button>
+      </form>
+    </section>
+  </div>
+</main>

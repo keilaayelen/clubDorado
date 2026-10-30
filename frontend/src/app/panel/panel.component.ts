@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../core/auth.service';
@@ -17,6 +17,14 @@ export class PanelComponent implements OnInit {
   error = '';
   message = '';
   uploading = false;
+  dragging = false;
+  draggedId: number | null = null;
+  editingId: number | null = null;
+  draftTitle = '';
+
+  private dragIndex = -1;
+  private pointerId = -1;
+  private orderBefore = '';
 
   @ViewChild('fileInput') fileInput?: ElementRef<HTMLInputElement>;
 
@@ -72,6 +80,87 @@ export class PanelComponent implements OnInit {
     });
   }
 
+  startDrag(event: PointerEvent, index: number) {
+    if ((event.target as HTMLElement).closest('button, input')) {
+      return;
+    }
+    this.dragging = true;
+    this.dragIndex = index;
+    this.draggedId = this.promos[index].id;
+    this.pointerId = event.pointerId;
+    this.orderBefore = this.promoIds();
+    (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+  }
+
+  @HostListener('document:pointermove', ['$event'])
+  moveDrag(event: PointerEvent) {
+    if (!this.dragging || event.pointerId !== this.pointerId) {
+      return;
+    }
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('article.promo'));
+    const target = cards.findIndex(card => {
+      const rect = card.getBoundingClientRect();
+      return event.clientX >= rect.left && event.clientX <= rect.right
+        && event.clientY >= rect.top && event.clientY <= rect.bottom;
+    });
+    if (target < 0 || target === this.dragIndex) {
+      return;
+    }
+    const next = [...this.promos];
+    const [moved] = next.splice(this.dragIndex, 1);
+    next.splice(target, 0, moved);
+    this.promos = next;
+    this.dragIndex = target;
+  }
+
+  @HostListener('document:pointerup', ['$event'])
+  @HostListener('document:pointercancel', ['$event'])
+  endDrag(event: PointerEvent) {
+    if (!this.dragging || event.pointerId !== this.pointerId) {
+      return;
+    }
+    this.dragging = false;
+    this.draggedId = null;
+    if (this.promoIds() === this.orderBefore) {
+      return;
+    }
+    this.promosApi.reorder(this.promos.map(promo => promo.id)).subscribe({
+      next: promos => {
+        this.promos = promos;
+        this.message = 'Orden guardado';
+        this.error = '';
+      },
+      error: () => {
+        this.error = 'No se pudo guardar el orden';
+        this.reload();
+      }
+    });
+  }
+
+  edit(promo: Promo) {
+    this.editingId = promo.id;
+    this.draftTitle = promo.title || '';
+    this.error = '';
+  }
+
+  cancelEdit() {
+    this.editingId = null;
+    this.draftTitle = '';
+  }
+
+  saveTitle(promo: Promo) {
+    this.promosApi.rename(promo.id, this.draftTitle.trim()).subscribe({
+      next: updated => {
+        this.promos = this.promos.map(item => item.id === updated.id ? updated : item);
+        this.editingId = null;
+        this.draftTitle = '';
+        this.message = 'Título actualizado';
+        this.error = '';
+      },
+      error: (err) => this.error = err.error?.error || 'No se pudo guardar el título'
+    });
+  }
+
   remove(promo: Promo) {
     if (!confirm('¿Borrar esta promo?')) {
       return;
@@ -84,6 +173,10 @@ export class PanelComponent implements OnInit {
       },
       error: () => this.error = 'No se pudo borrar'
     });
+  }
+
+  private promoIds() {
+    return this.promos.map(promo => promo.id).join(',');
   }
 
   private accepted(file: File) {

@@ -71,6 +71,38 @@
       </section>
     }
 
+    @if (expanded && promos.length) {
+      <div
+        class="viewer"
+        (pointerdown)="onPointerDown($event)"
+        (pointerup)="onViewerUp($event)"
+        (pointercancel)="stopTracking()">
+        <button class="viewer-close" type="button" (click)="closeExpanded()">Cerrar</button>
+        @if (isVideo(promos[index])) {
+          <video
+            class="viewer-clip"
+            [src]="promos[index].imageUrl"
+            playsinline
+            autoplay
+            loop
+            [attr.aria-label]="promos[index].title || 'Promo de Golden Club'"
+            (canplay)="onVideoReady(index)"></video>
+        } @else {
+          <img
+            class="viewer-photo"
+            [src]="promos[index].imageUrl"
+            [alt]="promos[index].title || 'Promo de Golden Club'">
+        }
+        @if (promos[index].title) {
+          <p class="viewer-title">{{ promos[index].title }}</p>
+        }
+        @if (promos.length > 1) {
+          <button class="nav prev viewer-nav" type="button" (click)="step(-1)" aria-label="Anterior">‹</button>
+          <button class="nav next viewer-nav" type="button" (click)="step(1)" aria-label="Siguiente">›</button>
+        }
+      </div>
+    }
+
     <div class="sheet" [class.solo]="!promos.length">
       <ul class="points">
         @for (phrase of phrases; track phrase) {

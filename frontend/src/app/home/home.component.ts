@@ -13,6 +13,7 @@ import { PromoService } from '../core/promo.service';
 export class HomeComponent implements OnInit, OnDestroy {
   promos: Promo[] = [];
   index = 0;
+  expanded = false;
   whatsappHref = 'https://wa.me/5492234376766';
   instagramUrl = 'https://www.instagram.com/abyyy_cajera/';
   facebookUrl = 'https://www.facebook.com/profile.php?id=61595250094917';
@@ -97,9 +98,41 @@ export class HomeComponent implements OnInit, OnDestroy {
     const delta = event.clientX - this.startX;
     if (delta <= -40) {
       this.step(1);
+      return;
+    }
+    if (delta >= 40) {
+      this.step(-1);
+      return;
+    }
+    const target = event.target as HTMLElement | null;
+    if (target?.closest('button')) {
+      return;
+    }
+    this.openExpanded();
+  }
+
+  onViewerUp(event: PointerEvent) {
+    if (!this.tracking) {
+      return;
+    }
+    this.tracking = false;
+    const delta = event.clientX - this.startX;
+    if (delta <= -40) {
+      this.step(1);
     } else if (delta >= 40) {
       this.step(-1);
     }
+  }
+
+  openExpanded() {
+    this.expanded = true;
+    this.clear();
+    this.playCurrent(true);
+  }
+
+  closeExpanded() {
+    this.expanded = false;
+    this.arm();
   }
 
   step(direction: number) {
@@ -108,18 +141,36 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     const total = this.promos.length;
     this.index = (this.index + direction + total) % total;
+    if (this.expanded) {
+      this.clear();
+      this.playCurrent(true);
+      return;
+    }
     this.arm();
   }
 
   goTo(next: number) {
     this.index = next;
+    if (this.expanded) {
+      this.clear();
+      this.playCurrent(true);
+      return;
+    }
     this.arm();
+  }
+
+  private playCurrent(reset: boolean) {
+    this.schedulePlayback();
+    if (this.playbackTimer) {
+      clearTimeout(this.playbackTimer);
+    }
+    this.playbackTimer = setTimeout(() => this.syncPlayback(reset), 0);
   }
 
   private arm() {
     this.clear();
     this.schedulePlayback();
-    if (this.promos.length < 2) {
+    if (this.expanded || this.promos.length < 2) {
       return;
     }
     this.timer = setInterval(() => {
@@ -135,14 +186,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.playbackTimer = setTimeout(() => this.syncPlayback(), 0);
   }
 
-  private syncPlayback() {
+  private syncPlayback(reset = false) {
     const videos = this.host.nativeElement.querySelectorAll<HTMLVideoElement>('video.clip');
     videos.forEach((video) => {
       const slide = Number(video.dataset['slide']);
       video.muted = true;
       video.playsInline = true;
       video.loop = true;
-      if (slide === this.index) {
+      if (!this.expanded && slide === this.index) {
         const pending = video.play();
         if (pending) {
           pending.catch(() => undefined);
@@ -151,6 +202,24 @@ export class HomeComponent implements OnInit, OnDestroy {
         video.pause();
       }
     });
+
+    const expandedVideo = this.host.nativeElement.querySelector<HTMLVideoElement>('video.viewer-clip');
+    if (!expandedVideo) {
+      return;
+    }
+    expandedVideo.playsInline = true;
+    expandedVideo.loop = true;
+    expandedVideo.muted = false;
+    if (reset) {
+      expandedVideo.currentTime = 0;
+    }
+    const pending = expandedVideo.play();
+    if (pending) {
+      pending.catch(() => {
+        expandedVideo.muted = true;
+        expandedVideo.play().catch(() => undefined);
+      });
+    }
   }
 
   private clear() {

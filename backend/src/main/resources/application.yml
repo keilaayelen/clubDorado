@@ -5,6 +5,8 @@ server:
     max-swallow-size: 42MB
 
 spring:
+  config:
+    import: optional:file:./config/local.yml
   datasource:
     url: jdbc:h2:file:./data/goldenclub
     driver-class-name: org.h2.Driver
@@ -21,7 +23,7 @@ spring:
 
 goldenclub:
   admin-user: admin
-  admin-password: golden2026aye
+  admin-password: ${GOLDENCLUB_ADMIN_PASSWORD:}
   whatsapp-phone: "5492234376766"
   whatsapp-message: "Hola, quiero más info"
   upload-dir: uploads

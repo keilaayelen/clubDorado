@@ -3,16 +3,21 @@ package com.clubdorado.promo;
 import com.clubdorado.config.AppProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class PromoService {
@@ -51,6 +56,31 @@ public class PromoService {
     promo.setTitle(cleanTitle(title));
     promo.setSortOrder(nextOrder);
     return promos.save(promo);
+  }
+
+  @Transactional
+  public List<Promo> reorder(List<Long> ids) {
+    List<Promo> current = list();
+    if (ids == null || ids.size() != current.size() || new HashSet<>(ids).size() != ids.size()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El orden tiene que incluir todas las promos");
+    }
+    Map<Long, Promo> byId = current.stream().collect(Collectors.toMap(Promo::getId, Function.identity()));
+    if (!byId.keySet().equals(new HashSet<>(ids))) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El orden tiene que incluir todas las promos");
+    }
+    int order = 0;
+    for (Long id : ids) {
+      byId.get(id).setSortOrder(order++);
+    }
+    return list();
+  }
+
+  @Transactional
+  public Promo rename(Long id, String title) {
+    Promo promo = promos.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Esa promo no existe"));
+    promo.setTitle(cleanTitle(title));
+    return promo;
   }
 
   public void delete(Long id) throws IOException {

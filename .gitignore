@@ -4,6 +4,7 @@ frontend/.angular/
 backend/target/
 backend/data/
 backend/uploads/
+backend/config/
 .tools/
 .idea/
 *.iml

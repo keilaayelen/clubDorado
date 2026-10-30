@@ -14,3 +14,11 @@ export interface PublicConfig {
   whatsappPhone: string;
   whatsappMessage: string;
 }
+
+export interface CrmSettings {
+  welcomeMessage: string;
+  lineOneName: string;
+  lineOnePhone: string;
+  lineTwoName: string;
+  lineTwoPhone: string;
+}

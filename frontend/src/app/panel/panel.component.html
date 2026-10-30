@@ -5,6 +5,7 @@
       <h1>Promos</h1>
     </div>
     <div class="actions">
+      <a routerLink="/crm">Conversaciones</a>
       <a routerLink="/">Ver la página</a>
       <button type="button" class="ghost" (click)="logout()">Salir</button>
     </div>
@@ -31,17 +32,41 @@
     </button>
   </section>
 
+  @if (promos.length > 1) {
+    <p class="hint">Arrastrá las promos para elegir cuál va primera.</p>
+  }
+
   <section class="grid">
-    @for (promo of promos; track promo.id) {
-      <article>
+    @for (promo of promos; track promo.id; let i = $index) {
+      <article
+        class="promo"
+        [class.dragging]="draggedId === promo.id"
+        (pointerdown)="startDrag($event, i)">
+        <span class="order">{{ i + 1 }}</span>
         @if (isVideo(promo)) {
-          <video [src]="promo.imageUrl" [muted]="true" playsinline loop autoplay [attr.aria-label]="promo.title || 'Promo'"></video>
+          <video draggable="false" [src]="promo.imageUrl" [muted]="true" playsinline loop autoplay [attr.aria-label]="promo.title || 'Promo'"></video>
         } @else {
-          <img [src]="promo.imageUrl" [alt]="promo.title || 'Promo'">
+          <img draggable="false" [src]="promo.imageUrl" [alt]="promo.title || 'Promo'">
         }
         <div>
-          <p>{{ promo.title || 'Sin título' }}</p>
-          <button type="button" class="danger" (click)="remove(promo)">Borrar</button>
+          @if (editingId === promo.id) {
+            <input
+              name="draft-{{ promo.id }}"
+              [(ngModel)]="draftTitle"
+              maxlength="80"
+              placeholder="Título de la promo"
+              (keydown.enter)="saveTitle(promo)">
+            <div class="row">
+              <button type="button" class="save" (click)="saveTitle(promo)">Guardar</button>
+              <button type="button" class="ghost" (click)="cancelEdit()">Cancelar</button>
+            </div>
+          } @else {
+            <p>{{ promo.title || 'Sin título' }}</p>
+            <div class="row">
+              <button type="button" class="ghost" (click)="edit(promo)">Editar</button>
+              <button type="button" class="danger" (click)="remove(promo)">Borrar</button>
+            </div>
+          }
         </div>
       </article>
     } @empty {
