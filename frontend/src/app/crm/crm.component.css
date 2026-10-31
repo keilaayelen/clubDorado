@@ -185,6 +185,15 @@ textarea {
   white-space: pre-wrap;
 }
 
+.line-title {
+  margin: 0.35rem 0 0;
+  color: #f0d48a;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .line {
   display: grid;
   grid-template-columns: 1fr 1fr;

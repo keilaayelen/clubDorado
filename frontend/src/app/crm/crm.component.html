@@ -42,10 +42,11 @@
 
         <div class="card">
           <h2>Números</h2>
-          <p class="hint">Por ahora son dos. Podés dejarlos vacíos y cargarlos después.</p>
+          <p class="hint">Son cuatro. Podés dejar vacías las que todavía no uses.</p>
+          <p class="line-title">Línea 1</p>
           <div class="line">
             <label>
-              Nombre de la línea
+              Nombre
               <input name="lineOneName" [(ngModel)]="settings.lineOneName" maxlength="40" placeholder="Atención">
             </label>
             <label>
@@ -53,14 +54,37 @@
               <input name="lineOnePhone" [(ngModel)]="settings.lineOnePhone" inputmode="numeric" placeholder="5492234376766">
             </label>
           </div>
+          <p class="line-title">Línea 2</p>
           <div class="line">
             <label>
-              Nombre de la línea
+              Nombre
               <input name="lineTwoName" [(ngModel)]="settings.lineTwoName" maxlength="40" placeholder="Turno noche">
             </label>
             <label>
               Número
               <input name="lineTwoPhone" [(ngModel)]="settings.lineTwoPhone" inputmode="numeric" placeholder="54911...">
+            </label>
+          </div>
+          <p class="line-title">Línea 3</p>
+          <div class="line">
+            <label>
+              Nombre
+              <input name="lineThreeName" [(ngModel)]="settings.lineThreeName" maxlength="40" placeholder="Turno tarde">
+            </label>
+            <label>
+              Número
+              <input name="lineThreePhone" [(ngModel)]="settings.lineThreePhone" inputmode="numeric" placeholder="54911...">
+            </label>
+          </div>
+          <p class="line-title">Línea 4</p>
+          <div class="line">
+            <label>
+              Nombre
+              <input name="lineFourName" [(ngModel)]="settings.lineFourName" maxlength="40" placeholder="Repuesto">
+            </label>
+            <label>
+              Número
+              <input name="lineFourPhone" [(ngModel)]="settings.lineFourPhone" inputmode="numeric" placeholder="54911...">
             </label>
           </div>
         </div>

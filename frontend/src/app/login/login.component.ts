@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../core/auth.service';
@@ -9,7 +9,7 @@ import { AuthService } from '../core/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   username = '';
   password = '';
   error = '';
@@ -19,6 +19,13 @@ export class LoginComponent {
     private auth: AuthService,
     private router: Router
   ) {}
+
+  ngOnInit() {
+    if (sessionStorage.getItem('gc_session_ended')) {
+      sessionStorage.removeItem('gc_session_ended');
+      this.error = 'La sesión venció. Entrá de nuevo.';
+    }
+  }
 
   submit() {
     this.error = '';

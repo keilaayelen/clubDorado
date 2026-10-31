@@ -30,7 +30,11 @@ public class CrmController {
         body.get("lineOneName"),
         body.get("lineOnePhone"),
         body.get("lineTwoName"),
-        body.get("lineTwoPhone")
+        body.get("lineTwoPhone"),
+        body.get("lineThreeName"),
+        body.get("lineThreePhone"),
+        body.get("lineFourName"),
+        body.get("lineFourPhone")
     );
     return view(saved);
   }
@@ -41,7 +45,11 @@ public class CrmController {
         "lineOneName", blank(settings.getLineOneName()),
         "lineOnePhone", blank(settings.getLineOnePhone()),
         "lineTwoName", blank(settings.getLineTwoName()),
-        "lineTwoPhone", blank(settings.getLineTwoPhone())
+        "lineTwoPhone", blank(settings.getLineTwoPhone()),
+        "lineThreeName", blank(settings.getLineThreeName()),
+        "lineThreePhone", blank(settings.getLineThreePhone()),
+        "lineFourName", blank(settings.getLineFourName()),
+        "lineFourPhone", blank(settings.getLineFourPhone())
     );
   }
 

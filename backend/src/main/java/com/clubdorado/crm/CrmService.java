@@ -29,7 +29,11 @@ public class CrmService {
       String lineOneName,
       String lineOnePhone,
       String lineTwoName,
-      String lineTwoPhone
+      String lineTwoPhone,
+      String lineThreeName,
+      String lineThreePhone,
+      String lineFourName,
+      String lineFourPhone
   ) {
     CrmSettings saved = current();
     saved.setWelcomeMessage(cleanMessage(welcomeMessage));
@@ -37,6 +41,10 @@ public class CrmService {
     saved.setLineOnePhone(cleanPhone(lineOnePhone, "El primer número"));
     saved.setLineTwoName(cleanName(lineTwoName));
     saved.setLineTwoPhone(cleanPhone(lineTwoPhone, "El segundo número"));
+    saved.setLineThreeName(cleanName(lineThreeName));
+    saved.setLineThreePhone(cleanPhone(lineThreePhone, "El tercer número"));
+    saved.setLineFourName(cleanName(lineFourName));
+    saved.setLineFourPhone(cleanPhone(lineFourPhone, "El cuarto número"));
     return settings.save(saved);
   }
 
@@ -48,6 +56,10 @@ public class CrmService {
     created.setLineOnePhone("");
     created.setLineTwoName("");
     created.setLineTwoPhone("");
+    created.setLineThreeName("");
+    created.setLineThreePhone("");
+    created.setLineFourName("");
+    created.setLineFourPhone("");
     return settings.save(created);
   }
 

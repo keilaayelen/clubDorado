@@ -21,4 +21,8 @@ export interface CrmSettings {
   lineOnePhone: string;
   lineTwoName: string;
   lineTwoPhone: string;
+  lineThreeName: string;
+  lineThreePhone: string;
+  lineFourName: string;
+  lineFourPhone: string;
 }

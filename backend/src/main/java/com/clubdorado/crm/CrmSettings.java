@@ -27,6 +27,18 @@ public class CrmSettings {
   @Column(length = 20)
   private String lineTwoPhone;
 
+  @Column(length = 40)
+  private String lineThreeName;
+
+  @Column(length = 20)
+  private String lineThreePhone;
+
+  @Column(length = 40)
+  private String lineFourName;
+
+  @Column(length = 20)
+  private String lineFourPhone;
+
   public Long getId() {
     return id;
   }
@@ -73,5 +85,37 @@ public class CrmSettings {
 
   public void setLineTwoPhone(String lineTwoPhone) {
     this.lineTwoPhone = lineTwoPhone;
+  }
+
+  public String getLineThreeName() {
+    return lineThreeName;
+  }
+
+  public void setLineThreeName(String lineThreeName) {
+    this.lineThreeName = lineThreeName;
+  }
+
+  public String getLineThreePhone() {
+    return lineThreePhone;
+  }
+
+  public void setLineThreePhone(String lineThreePhone) {
+    this.lineThreePhone = lineThreePhone;
+  }
+
+  public String getLineFourName() {
+    return lineFourName;
+  }
+
+  public void setLineFourName(String lineFourName) {
+    this.lineFourName = lineFourName;
+  }
+
+  public String getLineFourPhone() {
+    return lineFourPhone;
+  }
+
+  public void setLineFourPhone(String lineFourPhone) {
+    this.lineFourPhone = lineFourPhone;
   }
 }

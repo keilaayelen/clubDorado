@@ -17,7 +17,11 @@ export class CrmComponent implements OnInit {
     lineOneName: '',
     lineOnePhone: '',
     lineTwoName: '',
-    lineTwoPhone: ''
+    lineTwoPhone: '',
+    lineThreeName: '',
+    lineThreePhone: '',
+    lineFourName: '',
+    lineFourPhone: ''
   };
   error = '';
   message = '';
