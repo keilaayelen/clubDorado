@@ -1,6 +1,7 @@
 package com.clubdorado.promo;
 
 import com.clubdorado.config.AppProperties;
+import com.clubdorado.crm.CrmService;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.CacheControl;
@@ -29,16 +30,18 @@ public class PromoController {
 
   private final PromoService promos;
   private final AppProperties properties;
+  private final CrmService crm;
 
-  public PromoController(PromoService promos, AppProperties properties) {
+  public PromoController(PromoService promos, AppProperties properties, CrmService crm) {
     this.promos = promos;
     this.properties = properties;
+    this.crm = crm;
   }
 
   @GetMapping("/config")
   public Map<String, String> config() {
     return Map.of(
-        "whatsappPhone", properties.whatsappPhone(),
+        "whatsappPhone", crm.nextPublicPhone(),
         "whatsappMessage", properties.whatsappMessage()
     );
   }

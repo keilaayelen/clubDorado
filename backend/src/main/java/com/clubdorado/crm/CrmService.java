@@ -1,9 +1,13 @@
 package com.clubdorado.crm;
 
+import com.clubdorado.config.AppProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CrmService {
@@ -13,9 +17,29 @@ public class CrmService {
       "Hola, gracias por escribir a Golden Club. Ya recibimos tu mensaje y en un momento te atiende alguien del equipo.";
 
   private final CrmSettingsRepository settings;
+  private final AppProperties properties;
 
-  public CrmService(CrmSettingsRepository settings) {
+  public CrmService(CrmSettingsRepository settings, AppProperties properties) {
     this.settings = settings;
+    this.properties = properties;
+  }
+
+  @Transactional
+  public synchronized String nextPublicPhone() {
+    CrmSettings saved = current();
+    List<String> phones = new ArrayList<>();
+    addPhone(phones, saved.getLineOnePhone());
+    addPhone(phones, saved.getLineTwoPhone());
+    addPhone(phones, saved.getLineThreePhone());
+    addPhone(phones, saved.getLineFourPhone());
+    if (phones.isEmpty()) {
+      return properties.whatsappPhone();
+    }
+    int cursor = saved.getRotationIndex() == null ? 0 : saved.getRotationIndex();
+    int index = Math.floorMod(cursor, phones.size());
+    saved.setRotationIndex(index + 1);
+    settings.save(saved);
+    return phones.get(index);
   }
 
   @Transactional
@@ -60,7 +84,14 @@ public class CrmService {
     created.setLineThreePhone("");
     created.setLineFourName("");
     created.setLineFourPhone("");
+    created.setRotationIndex(0);
     return settings.save(created);
+  }
+
+  private void addPhone(List<String> phones, String phone) {
+    if (phone != null && !phone.isBlank()) {
+      phones.add(phone);
+    }
   }
 
   private String cleanMessage(String value) {

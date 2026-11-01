@@ -39,6 +39,8 @@ public class CrmSettings {
   @Column(length = 20)
   private String lineFourPhone;
 
+  private Integer rotationIndex;
+
   public Long getId() {
     return id;
   }
@@ -117,5 +119,13 @@ public class CrmSettings {
 
   public void setLineFourPhone(String lineFourPhone) {
     this.lineFourPhone = lineFourPhone;
+  }
+
+  public Integer getRotationIndex() {
+    return rotationIndex;
+  }
+
+  public void setRotationIndex(Integer rotationIndex) {
+    this.rotationIndex = rotationIndex;
   }
 }
