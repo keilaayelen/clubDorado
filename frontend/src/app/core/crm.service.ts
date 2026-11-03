@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CrmSettings } from './models';
+import { CrmContact, CrmSettings } from './models';
 
 @Injectable({ providedIn: 'root' })
 export class CrmService {
@@ -12,5 +12,9 @@ export class CrmService {
 
   save(settings: CrmSettings) {
     return this.http.put<CrmSettings>('/api/crm/settings', settings);
+  }
+
+  contacts() {
+    return this.http.get<CrmContact[]>('/api/crm/contacts');
   }
 }

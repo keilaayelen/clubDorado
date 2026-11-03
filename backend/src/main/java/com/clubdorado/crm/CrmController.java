@@ -1,11 +1,16 @@
 package com.clubdorado.crm;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -13,9 +18,27 @@ import java.util.Map;
 public class CrmController {
 
   private final CrmService crm;
+  private final ContactService contacts;
 
-  public CrmController(CrmService crm) {
+  public CrmController(CrmService crm, ContactService contacts) {
     this.crm = crm;
+    this.contacts = contacts;
+  }
+
+  @GetMapping("/contacts")
+  public List<Map<String, String>> contacts() {
+    return contacts.list().stream().map(this::contactView).toList();
+  }
+
+  @PostMapping("/contacts")
+  public Map<String, String> saveContact(@RequestBody Map<String, String> body) {
+    Contact saved = contacts.save(body.get("name"), body.get("phone"));
+    return contactView(saved);
+  }
+
+  @DeleteMapping("/contacts/{phone}")
+  public void deleteContact(@PathVariable String phone) {
+    contacts.delete(phone);
   }
 
   @GetMapping("/settings")
@@ -51,6 +74,15 @@ public class CrmController {
         "lineFourName", blank(settings.getLineFourName()),
         "lineFourPhone", blank(settings.getLineFourPhone())
     );
+  }
+
+  private Map<String, String> contactView(Contact contact) {
+    Map<String, String> view = new LinkedHashMap<>();
+    view.put("id", String.valueOf(contact.getId()));
+    view.put("name", blank(contact.getName()));
+    view.put("phone", contact.getPhone());
+    view.put("createdAt", contact.getCreatedAt().toString());
+    return view;
   }
 
   private String blank(String value) {

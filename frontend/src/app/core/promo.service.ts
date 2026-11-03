@@ -32,4 +32,8 @@ export class PromoService {
   rename(id: number, title: string) {
     return this.http.put<Promo>(`/api/promos/${id}`, { title });
   }
+
+  saveContact(name: string, phone: string) {
+    return this.http.post('/api/crm/contacts', { name, phone });
+  }
 }

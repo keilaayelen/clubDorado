@@ -347,8 +347,53 @@ figcaption {
 }
 
 .sheet .points,
-.sheet .whatsapp {
+.sheet .whatsapp,
+.sheet .lead,
+.sheet .register {
   width: min(100%, 22rem);
+}
+
+.register {
+  display: grid;
+  gap: 0.25rem;
+  text-align: left;
+}
+
+.register-title {
+  margin: 0;
+  font-weight: 800;
+}
+
+.register-hint {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: #f6e7c2;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.lead {
+  display: grid;
+  gap: 0.3rem;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+.lead input {
+  min-height: 2.7rem;
+  border-radius: 0.8rem;
+  border: 1px solid rgba(240, 212, 138, 0.35);
+  background: rgba(13, 6, 18, 0.88);
+  color: #f6f1e7;
+  padding: 0.4rem 0.7rem;
+  font: inherit;
+}
+
+.lead-note {
+  margin: 0;
+  width: min(100%, 22rem);
+  color: #f6e7c2;
+  font-size: 0.85rem;
 }
 
 .points {

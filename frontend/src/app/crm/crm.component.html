@@ -15,13 +15,25 @@
     <section class="inbox">
       <div class="inbox-head">
         <h2>Bandeja</h2>
-        <span>0</span>
+        <span>{{ contacts.length }}</span>
       </div>
-      <div class="empty">
-        <p class="bubble">Hola</p>
-        <h3>Todavía no hay mensajes</h3>
-        <p>Cuando conectemos los números, cada chat entra acá. El bot saluda primero y después lo toma el equipo.</p>
-      </div>
+      @if (contacts.length) {
+        <ul class="people">
+          @for (contact of contacts; track contact.id) {
+            <li>
+              <strong>{{ contact.name || 'Sin nombre' }}</strong>
+              <span>{{ contact.phone }}</span>
+              <time>{{ when(contact) }}</time>
+            </li>
+          }
+        </ul>
+      } @else {
+        <div class="empty">
+          <p class="bubble">Hola</p>
+          <h3>Todavía no hay números</h3>
+          <p>Cuando alguien deja su nombre y su número en la página, aparece acá.</p>
+        </div>
+      }
     </section>
 
     <section class="setup">
@@ -42,7 +54,7 @@
 
         <div class="card">
           <h2>Números</h2>
-          <p class="hint">El botón de la página reparte los turnos entre los números que completes.</p>
+          <p class="hint">Cada vez que aprietan el botón, entra el siguiente número cargado.</p>
           <p class="line-title">Línea 1</p>
           <div class="line">
             <label>

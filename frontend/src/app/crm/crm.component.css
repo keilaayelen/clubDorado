@@ -94,6 +94,34 @@ button[type="submit"] {
   font-weight: 800;
 }
 
+.people {
+  list-style: none;
+  margin: 0;
+  padding: 0.4rem 0;
+  overflow: auto;
+}
+
+.people li {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgba(226, 179, 64, 0.16);
+}
+
+.people strong {
+  color: #f6f1e7;
+}
+
+.people span {
+  color: #f0d48a;
+  font-weight: 700;
+}
+
+.people time {
+  color: #d9c7ea;
+  font-size: 0.82rem;
+}
+
 .empty {
   margin: auto;
   width: min(26rem, calc(100% - 2rem));

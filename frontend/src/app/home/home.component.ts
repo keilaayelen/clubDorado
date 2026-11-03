@@ -1,12 +1,12 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { forkJoin } from 'rxjs';
 import { isPromoVideo, Promo } from '../core/models';
 import { PromoService } from '../core/promo.service';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink],
+  imports: [FormsModule, RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -14,7 +14,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   promos: Promo[] = [];
   index = 0;
   expanded = false;
-  whatsappHref = 'https://wa.me/5492234376766';
+  whatsappHref = '/api/whatsapp';
+  leadName = '';
+  leadPhone = '';
+  leadNote = '';
   instagramUrl = 'https://www.instagram.com/abyyy_cajera/';
   facebookUrl = 'https://www.facebook.com/profile.php?id=61595250094917';
   phrases = [
@@ -55,19 +58,31 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    forkJoin({
-      promos: this.promosApi.list(),
-      config: this.promosApi.config()
-    }).subscribe({
-      next: ({ promos, config }) => {
+    this.promosApi.list().subscribe({
+      next: promos => {
         this.promos = promos;
-        const phone = (config.whatsappPhone || '').replace(/\D/g, '');
-        const text = encodeURIComponent(config.whatsappMessage || 'Hola');
-        this.whatsappHref = phone
-          ? `https://wa.me/${phone}?text=${text}`
-          : `https://wa.me/?text=${text}`;
         this.arm();
       }
+    });
+  }
+
+  freshWhatsapp(event: Event) {
+    const phone = this.leadPhone.replace(/\s+/g, '');
+    const name = this.leadName.trim();
+    const link = event.currentTarget as HTMLAnchorElement;
+    link.href = '/api/whatsapp?t=' + Date.now();
+    if (!name && !phone) {
+      this.leadNote = '';
+      return;
+    }
+    if (!/^\d{8,15}$/.test(phone)) {
+      this.leadNote = 'Ese número no se guardó. WhatsApp se abre igual.';
+      return;
+    }
+    this.leadNote = '';
+    this.promosApi.saveContact(name, phone).subscribe({
+      next: () => this.leadNote = name ? 'Listo, quedaste registrado.' : 'Guardamos tu número.',
+      error: () => this.leadNote = 'No se pudo guardar el registro. WhatsApp se abre igual.'
     });
   }
 

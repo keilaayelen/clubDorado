@@ -15,6 +15,13 @@ export interface PublicConfig {
   whatsappMessage: string;
 }
 
+export interface CrmContact {
+  id: string;
+  name: string;
+  phone: string;
+  createdAt: string;
+}
+
 export interface CrmSettings {
   welcomeMessage: string;
   lineOneName: string;

@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../core/auth.service';
 import { CrmService } from '../core/crm.service';
-import { CrmSettings } from '../core/models';
+import { CrmContact, CrmSettings } from '../core/models';
 
 @Component({
   selector: 'app-crm',
@@ -23,6 +23,7 @@ export class CrmComponent implements OnInit {
     lineFourName: '',
     lineFourPhone: ''
   };
+  contacts: CrmContact[] = [];
   error = '';
   message = '';
   saving = false;
@@ -38,6 +39,17 @@ export class CrmComponent implements OnInit {
       next: settings => this.settings = settings,
       error: () => this.error = 'No se pudo abrir el CRM'
     });
+    this.crm.contacts().subscribe({
+      next: contacts => this.contacts = contacts
+    });
+  }
+
+  when(contact: CrmContact) {
+    const date = new Date(contact.createdAt);
+    if (Number.isNaN(date.getTime())) {
+      return '';
+    }
+    return date.toLocaleString('es-AR', { dateStyle: 'short', timeStyle: 'short' });
   }
 
   save() {

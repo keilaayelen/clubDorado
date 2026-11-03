@@ -31,8 +31,8 @@ public class SecurityConfig {
         .cors(cors -> {})
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-            .requestMatchers(HttpMethod.GET, "/api/promos", "/api/config", "/api/files/**").permitAll()
+            .requestMatchers(HttpMethod.POST, "/api/auth/login", "/api/crm/contacts").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/promos", "/api/config", "/api/files/**", "/api/whatsapp").permitAll()
             .anyRequest().authenticated())
         .exceptionHandling(errors -> errors.authenticationEntryPoint((request, response, ex) -> {
           response.setStatus(401);
@@ -66,7 +66,12 @@ public class SecurityConfig {
   @Bean
   CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration config = new CorsConfiguration();
-    config.setAllowedOrigins(List.of("http://localhost:4200", "http://127.0.0.1:4200"));
+    config.setAllowedOrigins(List.of(
+        "http://localhost:4200",
+        "http://127.0.0.1:4200",
+        "https://goldenclub.com.ar",
+        "https://www.goldenclub.com.ar"
+    ));
     config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
     config.setAllowedHeaders(List.of("*"));
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

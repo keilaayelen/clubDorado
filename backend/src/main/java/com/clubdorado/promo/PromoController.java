@@ -5,6 +5,8 @@ import com.clubdorado.crm.CrmService;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -41,9 +45,19 @@ public class PromoController {
   @GetMapping("/config")
   public Map<String, String> config() {
     return Map.of(
-        "whatsappPhone", crm.nextPublicPhone(),
+        "whatsappPhone", properties.whatsappPhone(),
         "whatsappMessage", properties.whatsappMessage()
     );
+  }
+
+  @GetMapping("/whatsapp")
+  public ResponseEntity<Void> whatsapp() {
+    String phone = crm.nextPublicPhone().replaceAll("\\D", "");
+    String text = URLEncoder.encode(properties.whatsappMessage(), StandardCharsets.UTF_8).replace("+", "%20");
+    return ResponseEntity.status(HttpStatus.FOUND)
+        .cacheControl(CacheControl.noStore())
+        .header(HttpHeaders.LOCATION, "https://wa.me/" + phone + "?text=" + text)
+        .build();
   }
 
   @GetMapping("/promos")
